@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          working_directory: OEF-Social_Service
+          working_directory: OEF-Social_Service/OEF-Social_Service
           name: build solution
           command: |
             dotnet build
@@ -18,12 +18,12 @@ jobs:
     steps:
       - checkout
       - run:
-          working_directory: OEF-Social_UnitTest
+          working_directory: OEF-Social_Service/OEF-Social_UnitTest
           name: Run unittests
           command: |
             dotnet test
       - run:
-          working_directory: OEF-Social_IntegrationTest
+          working_directory: OEF-Social_Service/OEF-Social_IntegrationTest
           name: Run integrationtests
           command: |
             dotnet test

@@ -27,13 +27,6 @@ jobs:
           working_directory: OEF-Social_Service/OEF-Social_Service.XIntegration
           name: Run integrationtests
           command: dotnet test
-  sonarqube:
-    docker:
-      - image: 'node:latest'
-    steps:
-        - checkout
-        - sonarcloud/scan:
-             project_root: OEF-Social_Service
 
 workflows:
   build: 
@@ -42,6 +35,3 @@ workflows:
   test: 
     jobs:
       - test
-  quality: 
-    jobs:
-      - sonarqube

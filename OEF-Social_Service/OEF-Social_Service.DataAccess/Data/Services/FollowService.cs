@@ -13,7 +13,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 {
     public class FollowService : IFollowService
     {
-        private ISession _session;
+        private IAsyncSession _session;
 
         private ILogger<FollowService> _logger;
 
@@ -24,21 +24,14 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         {
             _logger = logger;
             _database = appSettingsOptions.Value.Neo4jDatabase;
-            _session = driver.Session(o => o.WithDatabase(_database));
+            _session = driver.AsyncSession(o => o.WithDatabase(_database));
         }
 
         public void printGreeting(string message)
         {
             using (_session)
             {
-                var greeting = _session.ExecuteWrite(tx =>
-                {
-                    var result = tx.Run("CREATE (a:Greeting) " +
-                                        "SET a.message = $message " +
-                                        "RETURN a.message + ', from node ' + id(a)",
-                        new { message });
-                    return result;
-                });
+                var greeting = _session.RunAsync($"CREATE (a:Greeting) SET a.message = \"{message}\"  RETURN a.message");
                 Console.WriteLine(greeting);
             }
         }

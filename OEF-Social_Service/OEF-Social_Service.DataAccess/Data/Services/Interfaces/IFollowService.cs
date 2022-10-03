@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OEF_Social_Service.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
 {
     public interface IFollowService
     {
-        void printGreeting(string message);
+        Task createUser(Person person);
+        Task followUser(string person1, string person2);
     }
 }

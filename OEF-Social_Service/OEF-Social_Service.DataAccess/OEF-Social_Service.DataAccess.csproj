@@ -14,4 +14,8 @@
     <PackageReference Include="Neo4j.Driver.Simple" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OEF-Social_Service.Models\OEF-Social_Service.Models.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -8,7 +8,8 @@ namespace OEF_Social_Service.Models
 {
     public class Person
     {
-        public string name { get; set; }
-        public int born { get; set; }
+        public string? firstname { get; set; }
+        public string? lastname { get; set; }
+        public string? education { get; set; }
     }
 }

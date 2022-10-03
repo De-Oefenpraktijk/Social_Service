@@ -9,6 +9,7 @@ namespace OEF_Social_Service.Services.Interfaces
 {
     public interface ITestLogic
     {
-        void writeHello(string message);
+        void CreatePerson(Person person);
+        void followPerson(string person1, string person2);
     }
 }

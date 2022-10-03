@@ -18,12 +18,12 @@ namespace OEF_Social_Service.Controllers
             _testLogic = testLogic;
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(string message)
+        [HttpPost("createUser")]
+        public IActionResult CreateUserNode(Person person)
         {
             try
             {
-                _testLogic.writeHello(message);
+                _testLogic.CreatePerson(person);
             }
             catch (Exception e)
             {
@@ -31,6 +31,21 @@ namespace OEF_Social_Service.Controllers
             }
             return Ok();
         }
+
+        [HttpPost("followUser")]
+        public IActionResult followUser(string person1, string person2)
+        {
+            try
+            {
+                _testLogic.followPerson(person1, person2);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+            return Ok();
+        }
+
         //[HttpPost("get")]
         //public IActionResult GetUser(string name)
         //{

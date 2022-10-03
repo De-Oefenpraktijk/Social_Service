@@ -18,9 +18,14 @@ namespace OEF_Social_Service.Services
             _followService = followService; 
         }
 
-        public void writeHello(string message)
+        public void CreatePerson(Person person)
         {
-            _followService.printGreeting(message);
+            _followService.createUser(person);
+        }
+
+        public void followPerson(string person1, string person2)
+        {
+            _followService.followUser(person1, person2);
         }
 
         //public async Task<List<Dictionary<string, object>>> SearchPersonsByName(string searchString)

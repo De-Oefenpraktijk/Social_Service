@@ -15,4 +15,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OEF-Social_Service.Composition\OEF-Social_Service.Composition.csproj" />
+    <ProjectReference Include="..\OEF-Social_Service.Services\OEF-Social_Service.Logic.csproj" />
+  </ItemGroup>
+
 </Project>

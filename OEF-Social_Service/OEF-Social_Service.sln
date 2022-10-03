@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OEF-Social_Service.DataAcce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OEF-Social_Service.Models", "OEF-Social_Service.Models\OEF-Social_Service.Models.csproj", "{92174CCA-D380-4090-BD9F-AEA720AB5088}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OEF-Social_Service.Services", "OEF-Social_Service.Services\OEF-Social_Service.Services.csproj", "{13D1C24B-5145-4C8D-A993-A295EA0F87E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OEF-Social_Service.Logic", "OEF-Social_Service.Services\OEF-Social_Service.Logic.csproj", "{13D1C24B-5145-4C8D-A993-A295EA0F87E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{714DA1CA-FFD6-43B6-A46D-78BB652D819F} = {714DA1CA-FFD6-43B6-A46D-78BB652D819F}
 	EndProjectSection

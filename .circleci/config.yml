@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.1.0
+
 jobs:
   build:
     docker:
@@ -9,7 +12,8 @@ jobs:
       - run:
           working_directory: OEF-Social_Service/OEF-Social_Service
           name: build solution
-          command: |
+          command:| 
+            dotnet restore
             dotnet build
 
   test:
@@ -18,18 +22,32 @@ jobs:
     steps:
       - checkout
       - run:
-          working_directory: OEF-Social_Service/OEF-Social_UnitTest
+          working_directory: OEF-Social_Service/OEF-Social_Service.Services.XUnit
           name: Run unittests
-          command: |
-            dotnet test
+          command: dotnet test
       - run:
-          working_directory: OEF-Social_Service/OEF-Social_IntegrationTest
+          working_directory: OEF-Social_Service/OEF-Social_Service.XIntegration
           name: Run integrationtests
-          command: |
-            dotnet test
+          command: dotnet test
 
 workflows:
-  sample: 
+  test: 
+    jobs:
+      - test
+    filters:
+      branches:
+        only: 
+          - main
+          - develop
+
+  build: 
     jobs:
       - build
+    requires:
       - test
+    filters:
+      branches:
+        only: 
+          - main
+          - develop
+

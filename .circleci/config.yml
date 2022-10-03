@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  sonarcloud: sonarsource/sonarcloud@1.1.0
-
 jobs:
   build:
     docker:
@@ -31,20 +28,20 @@ jobs:
           command: dotnet test
 
 workflows:
-  test: 
+  test:
     jobs:
       - test
     filters:
       branches:
-        only: 
+        only:
           - main
           - develop
 
   build: 
     jobs:
       - build
-    requires:
-      - test
+          requires: 
+          - test
     filters:
       branches:
         only: 

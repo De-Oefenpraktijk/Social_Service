@@ -12,6 +12,6 @@ namespace OEF_Social_Service.Services.Interfaces
     {
         void CreatePerson(Person person);
         void followPerson(string person1, string person2);
-        void getRequest(string person);
+        Task<string> getRequest(string person);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Amazon.Runtime.Internal.Transform;
+﻿using Amazon.Runtime.Internal.Settings;
+using Amazon.Runtime.Internal.Transform;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace OEF_Social_Service.DataAccess.Data.Services
@@ -69,7 +71,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             
         }
 
-        public async Task<List<Person>> GetRequest(string person)
+        public async Task<string> GetRequest(string person)
         {
             var data = new List<Person>();
             var statementText = new StringBuilder();
@@ -82,13 +84,12 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
                 var result = await query.ToListAsync();
-                foreach (var item in result)
-                {
-                    Console.WriteLine(item.Values);
-                }
-                Console.WriteLine(result);
-                return null;
+                var i = JsonSerializer.Serialize(result);
+                Console.WriteLine(i);
+
+                return i;
             }
+
         }
 
         public async Task<List<Person>> ExecuteReadListAsync(string person)

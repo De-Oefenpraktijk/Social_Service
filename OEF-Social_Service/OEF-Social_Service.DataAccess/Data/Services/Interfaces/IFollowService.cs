@@ -12,7 +12,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
     {
         Task createUser(Person person);
         Task sendRequest(string person1, string person2);
-        Task<List<Person>> GetRequest(string person);
+        Task<string> GetRequest(string person);
         Task<List<Person>> ExecuteReadListAsync(string person);
     }
 }

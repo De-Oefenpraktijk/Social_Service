@@ -29,16 +29,9 @@ namespace OEF_Social_Service.Services
             _followService.sendRequest(person1, person2);
         }
 
-        public void getRequest(string person)
+        public Task<string> getRequest(string person)
         {
-            try
-            {
-                _followService.GetRequest(person);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+                return _followService.GetRequest(person);
         }
 
         //public async Task<List<Dictionary<string, object>>> SearchPersonsByName(string searchString)

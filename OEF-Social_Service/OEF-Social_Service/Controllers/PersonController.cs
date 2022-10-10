@@ -48,16 +48,8 @@ namespace OEF_Social_Service.Controllers
         [HttpGet("getRequest")]
         public IActionResult getRequest(string person)
         {
-            try
-            {
-                _testLogic.getRequest(person);
-                return Ok(person);
-
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { message = e.Message });
-            }
+                var i = _testLogic.getRequest(person);
+                return Ok(i.Result);
         }
 
         //[HttpPost("get")]

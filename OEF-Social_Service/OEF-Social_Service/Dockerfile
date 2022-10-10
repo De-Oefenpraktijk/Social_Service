@@ -9,7 +9,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["OEF-Social_Service/OEF-Social_Service.csproj", "OEF-Social_Service/"]
 COPY ["OEF-Social_Service.Composition/OEF-Social_Service.Composition.csproj", "OEF-Social_Service.Composition/"]
-COPY ["OEF-Social_Service.Services/OEF-Social_Service.Services.csproj", "OEF-Social_Service.Services/"]
+COPY ["OEF-Social_Service.Services/OEF-Social_Service.Logic.csproj", "OEF-Social_Service.Logic/"]
 COPY ["OEF-Social_Service.DataAccess/OEF-Social_Service.DataAccess.csproj", "OEF-Social_Service.DataAccess/"]
 COPY ["OEF-Social_Service.Models/OEF-Social_Service.Models.csproj", "OEF-Social_Service.Models/"]
 RUN dotnet restore "OEF-Social_Service/OEF-Social_Service.csproj"

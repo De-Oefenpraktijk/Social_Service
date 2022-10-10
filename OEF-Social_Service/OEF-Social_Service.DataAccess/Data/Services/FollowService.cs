@@ -75,7 +75,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         {
             var data = new List<Person>();
             var statementText = new StringBuilder();
-            statementText.Append("MATCH (:Person {Firstname: $firstname})--(person:Person) RETURN person");
+            statementText.Append("Match (user:Person)-[r]->({Firstname: $firstname}) Where Not ({Firstname: $firstname})-[]->(user) Return user");
             var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", person},

@@ -45,6 +45,20 @@ namespace OEF_Social_Service.Controllers
             }
             return Ok();
         }
+        [HttpGet("getRequest")]
+        public IActionResult getRequest(string person)
+        {
+            try
+            {
+                _testLogic.getRequest(person);
+                return Ok(person);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
 
         //[HttpPost("get")]
         //public IActionResult GetUser(string name)

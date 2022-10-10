@@ -1,4 +1,5 @@
-﻿using OEF_Social_Service.Models;
+﻿using Neo4j.Driver;
+using OEF_Social_Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
     public interface IFollowService
     {
         Task createUser(Person person);
-        Task followUser(string person1, string person2);
+        Task sendRequest(string person1, string person2);
+        Task<List<Person>> GetRequest(string person);
+        Task<List<Person>> ExecuteReadListAsync(string person);
     }
 }

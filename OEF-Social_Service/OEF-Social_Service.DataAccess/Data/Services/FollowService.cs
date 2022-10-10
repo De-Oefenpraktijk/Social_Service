@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Amazon.Runtime.Internal.Transform;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
 using OEF_Social_Service.Composition;
@@ -17,6 +18,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         private IAsyncSession _session;
         private string _database;
         private readonly IDriver _driver;
+        public Person _person;
 
         public FollowService(IDriver driver, ILogger<FollowService> logger, IOptions<ApplicationSettings> appSettingsOptions)
         {
@@ -27,24 +29,34 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public async Task createUser(Person person)
         {
             var statementText = new StringBuilder();
-            statementText.Append("CREATE (n:Person {firstname: $firstname, lastname: $lastname, education: $education})");
+            statementText.Append("CREATE (n:Person {Id : $id, Firstname: $firstname, Lastname: $lastname, Username: $username, Email: $emailAddress, Password: $password, EnrollmentDate: $enrollmentDate, Role: $role, Institution: $institution, Theme: $theme, ResidencePlace: $residencePlace})");
             var statementParameters = new Dictionary<string, object>
             {
-                {"firstname", person.firstname},
-                {"lastname", person.lastname},
-                {"education", person.education}
+                {"id", person.Id.ToString()},
+                {"firstname", person.FirstName},
+                {"lastname", person.LastName},
+                {"username", person.Username},
+                {"emailAddress", person.EmailAddress},
+                {"password", person.Password},
+                {"enrollmentDate", person.EnrollmentDate.ToShortDateString()},
+                {"role", person.Role},
+                {"institution", person.Institution},
+                {"theme", person.Theme},
+                {"residencePlace", person.ResidencePlace}
             };
 
             using (_session)
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+                Console.Write(query);
+                
             }
         }
 
-        public async Task followUser(string person1, string person2)
+        public async Task sendRequest(string person1, string person2)
         {
             var statementText = new StringBuilder();
-            statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.firstname = $firstname AND p2.firstname = $firstname2 CREATE (p1)-[p:Follows] ->(p2)");
+            statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
             var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", person1},
@@ -54,6 +66,51 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
+            
+        }
+
+        public async Task<List<Person>> GetRequest(string person)
+        {
+            var data = new List<Person>();
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (:Person {Firstname: $firstname})--(person:Person) RETURN person");
+            var statementParameters = new Dictionary<string, object>
+            {
+                {"firstname", person},
+            };
+            using (_session)
+            {
+                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+                var result = await query.ToListAsync();
+                foreach (var item in result)
+                {
+                    Console.WriteLine(item.Values);
+                }
+                Console.WriteLine(result);
+                return null;
+            }
+        }
+
+        public async Task<List<Person>> ExecuteReadListAsync(string person)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (:Person {Firstname: $firstname})--(person:Person) RETURN person");
+            var statementParameters = new Dictionary<string, object>
+            {
+                {"firstname", person},
+            };
+
+            await _session.ExecuteReadAsync(async tx =>
+            {
+                var data = new List<Person>();
+                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+                var records = await query.ToListAsync();
+
+                data = records.Select(x => (Person)x.Values).ToList();
+                Console.WriteLine(data);
+                return data;
+            });
+            return null;
         }
     }
 }

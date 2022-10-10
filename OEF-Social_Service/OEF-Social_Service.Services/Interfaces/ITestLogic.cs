@@ -1,4 +1,5 @@
-﻿using OEF_Social_Service.Models;
+﻿using Neo4j.Driver;
+using OEF_Social_Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace OEF_Social_Service.Services.Interfaces
     {
         void CreatePerson(Person person);
         void followPerson(string person1, string person2);
+        void getRequest(string person);
     }
 }

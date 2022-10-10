@@ -1,4 +1,5 @@
-﻿using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
+﻿using Neo4j.Driver;
+using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
 using OEF_Social_Service.Models;
 using OEF_Social_Service.Services.Interfaces;
 using System;
@@ -25,7 +26,19 @@ namespace OEF_Social_Service.Services
 
         public void followPerson(string person1, string person2)
         {
-            _followService.followUser(person1, person2);
+            _followService.sendRequest(person1, person2);
+        }
+
+        public void getRequest(string person)
+        {
+            try
+            {
+                _followService.GetRequest(person);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         //public async Task<List<Dictionary<string, object>>> SearchPersonsByName(string searchString)

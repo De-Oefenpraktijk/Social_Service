@@ -13,6 +13,6 @@ namespace OEF_Social_Service.Services.Interfaces
         void CreatePerson(Person person);
         void FollowPerson(string person1, string person2);
         Task<string> GetRequests(string person);
-        void DeletePerson(string person1, string person2);
+        void DeleteRelation(string person1, string person2);
     }
 }

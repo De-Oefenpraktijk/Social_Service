@@ -34,9 +34,9 @@ namespace OEF_Social_Service.Services
                 return _followService.GetRequests(person);
         }
 
-        public void DeletePerson(string person1, string person2)
+        public void DeleteRelation(string person1, string person2)
         {
-            _followService.DeleteFollower(person1, person2);
+            _followService.DeleteRelation(person1, person2);
         }
     }
 }

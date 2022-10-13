@@ -83,10 +83,10 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task DeleteFollower(string person1, string person2)
+        public async Task DeleteRelation(string person1, string person2)
         {
             var statementText = new StringBuilder();
-            statementText.Append("MATCH (p1:Person {Firstname: $firstname})-[r:Request_Send]-(p2:Person {Firstname: $firstname2}) DELETE r");
+            statementText.Append("Match (user:Person)-[r]->({Firstname: $firstname2}) Where ({Firstname: $firstname})-[r]->() DELETE r");
             var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", person1},

@@ -52,10 +52,10 @@ namespace OEF_Social_Service.Controllers
                 return Ok(i.Result);
         }
 
-        [HttpDelete("getRequest")]
-        public IActionResult deleteFollower(string person1, string person2)
+        [HttpDelete("DeleteRelation")]
+        public IActionResult DeleteRelation(string person1, string person2)
         {
-            _testLogic.DeletePerson(person1, person2);
+            _testLogic.DeleteRelation(person1, person2);
             return Ok();
         }
 

@@ -13,6 +13,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
         Task CreateUser(Person person);
         Task SendRequest(string person1, string person2);
         Task<string> GetRequests(string person);
-        Task DeleteFollower(string person1, string person2);
+        Task DeleteRelation(string person1, string person2);
     }
 }

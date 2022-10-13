@@ -58,6 +58,12 @@ namespace OEF_Social_Service.Controllers
             _testLogic.DeleteRelation(person1, person2);
             return Ok();
         }
+        [HttpPost("AcceptRelation")]
+        public IActionResult AcceptRelation(string person1, string person2)
+        {
+            _testLogic.AcceptRelation(person1, person2);
+            return Ok();
+        }
 
         //[HttpPost("get")]
         //public IActionResult GetUser(string name)

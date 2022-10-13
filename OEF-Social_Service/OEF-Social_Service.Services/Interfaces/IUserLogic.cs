@@ -14,5 +14,6 @@ namespace OEF_Social_Service.Services.Interfaces
         void FollowPerson(string person1, string person2);
         Task<string> GetRequests(string person);
         void DeleteRelation(string person1, string person2);
+        void AcceptRelation(string person1, string person2);
     }
 }

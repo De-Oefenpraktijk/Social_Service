@@ -97,5 +97,19 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
         }
+        public async Task AcceptRelation(string person1, string person2)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("Match (user:Person {Firstname: $firstname})-[r:Request_Send]->(m:Person {Firstname:$firstname2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
+            var statementParameters = new Dictionary<string, object>
+            {
+                {"firstname", person2},
+                {"firstname2", person1}
+            };
+            using (_session)
+            {
+                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+            }
+        }
     }
 }

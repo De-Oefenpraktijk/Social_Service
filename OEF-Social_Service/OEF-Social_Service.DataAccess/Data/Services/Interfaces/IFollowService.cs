@@ -14,5 +14,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
         Task SendRequest(string person1, string person2);
         Task<string> GetRequests(string person);
         Task DeleteRelation(string person1, string person2);
+        Task AcceptRelation(string person1, string person2);
     }
 }

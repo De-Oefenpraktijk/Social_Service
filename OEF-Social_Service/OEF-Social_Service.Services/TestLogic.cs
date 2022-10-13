@@ -29,10 +29,16 @@ namespace OEF_Social_Service.Services
             _followService.sendRequest(person1, person2);
         }
 
-        public Task<string> getRequest(string person)
+        public Task<string> getRequests(string person)
         {
-                return _followService.GetRequest(person);
+                return _followService.GetRequests(person);
         }
+
+        public void deletePerson(string person1, string person2)
+        {
+            _followService.deleteFollower(person1, person2);
+        }
+
 
         //public async Task<List<Dictionary<string, object>>> SearchPersonsByName(string searchString)
         //{

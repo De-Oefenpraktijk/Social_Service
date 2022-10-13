@@ -48,8 +48,15 @@ namespace OEF_Social_Service.Controllers
         [HttpGet("getRequest")]
         public IActionResult getRequest(string person)
         {
-                var i = _testLogic.getRequest(person);
+                var i = _testLogic.getRequests(person);
                 return Ok(i.Result);
+        }
+
+        [HttpDelete("getRequest")]
+        public IActionResult deleteFollower(string person1, string person2)
+        {
+            _testLogic.deletePerson(person1, person2);
+            return Ok();
         }
 
         //[HttpPost("get")]

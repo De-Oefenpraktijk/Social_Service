@@ -1,17 +1,11 @@
-﻿using Amazon.Runtime.Internal.Settings;
-using Amazon.Runtime.Internal.Transform;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
 using OEF_Social_Service.Composition;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
 using OEF_Social_Service.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace OEF_Social_Service.DataAccess.Data.Services
 {
@@ -71,7 +65,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             
         }
 
-        public async Task<string> GetRequest(string person)
+        public async Task<string> GetRequests(string person)
         {
             var data = new List<Person>();
             var statementText = new StringBuilder();
@@ -80,7 +74,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 {"firstname", person},
             };
-            using (_session)
+            using (_session)    
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
                 var result = await query.ToListAsync();
@@ -112,6 +106,22 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 return data;
             });
             return null;
+        }
+
+        public async Task deleteFollower(string person1, string person2)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (p1:Person {Firstname: $firstname})-[r:Request_Send]-(p2:Person {Firstname: $firstname2}) DELETE r");
+            var statementParameters = new Dictionary<string, object>
+            {
+                {"firstname", person1},
+                {"firstname2", person2}
+            };
+            using (_session)
+            {
+                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+            }
+
         }
     }
 }

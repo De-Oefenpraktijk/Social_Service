@@ -10,10 +10,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
 {
     public interface IFollowService
     {
-        Task createUser(Person person);
-        Task sendRequest(string person1, string person2);
+        Task CreateUser(Person person);
+        Task SendRequest(string person1, string person2);
         Task<string> GetRequests(string person);
-        Task<List<Person>> ExecuteReadListAsync(string person);
-        Task deleteFollower(string person1, string person2);
+        Task DeleteFollower(string person1, string person2);
     }
 }

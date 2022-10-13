@@ -13,7 +13,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services
     {
         private IAsyncSession _session;
         private string _database;
-        private readonly IDriver _driver;
         public Person _person;
 
         public FollowService(IDriver driver, ILogger<FollowService> logger, IOptions<ApplicationSettings> appSettingsOptions)
@@ -22,7 +21,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             _session = driver.AsyncSession(o => o.WithDatabase(_database));
         }
 
-        public async Task createUser(Person person)
+        public async Task CreateUser(Person person)
         {
             var statementText = new StringBuilder();
             statementText.Append("CREATE (n:Person {Id : $id, Firstname: $firstname, Lastname: $lastname, Username: $username, Email: $emailAddress, Password: $password, EnrollmentDate: $enrollmentDate, Role: $role, Institution: $institution, Theme: $theme, ResidencePlace: $residencePlace})");
@@ -49,7 +48,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task sendRequest(string person1, string person2)
+        public async Task SendRequest(string person1, string person2)
         {
             var statementText = new StringBuilder();
             statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
@@ -62,7 +61,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
-            
         }
 
         public async Task<string> GetRequests(string person)
@@ -83,32 +81,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
                 return i;
             }
-
         }
 
-        public async Task<List<Person>> ExecuteReadListAsync(string person)
-        {
-            var statementText = new StringBuilder();
-            statementText.Append("MATCH (:Person {Firstname: $firstname})--(person:Person) RETURN person");
-            var statementParameters = new Dictionary<string, object>
-            {
-                {"firstname", person},
-            };
-
-            await _session.ExecuteReadAsync(async tx =>
-            {
-                var data = new List<Person>();
-                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
-                var records = await query.ToListAsync();
-
-                data = records.Select(x => (Person)x.Values).ToList();
-                Console.WriteLine(data);
-                return data;
-            });
-            return null;
-        }
-
-        public async Task deleteFollower(string person1, string person2)
+        public async Task DeleteFollower(string person1, string person2)
         {
             var statementText = new StringBuilder();
             statementText.Append("MATCH (p1:Person {Firstname: $firstname})-[r:Request_Send]-(p2:Person {Firstname: $firstname2}) DELETE r");
@@ -121,7 +96,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
-
         }
     }
 }

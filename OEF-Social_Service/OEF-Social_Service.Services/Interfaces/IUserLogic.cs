@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace OEF_Social_Service.Services.Interfaces
 {
-    public interface ITestLogic
+    public interface IUserLogic
     {
         void CreatePerson(Person person);
-        void followPerson(string person1, string person2);
-        Task<string> getRequests(string person);
-        void deletePerson(string person1, string person2);
+        void FollowPerson(string person1, string person2);
+        Task<string> GetRequests(string person);
+        void DeletePerson(string person1, string person2);
     }
 }

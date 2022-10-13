@@ -10,9 +10,9 @@ namespace OEF_Social_Service.Controllers
     public class PersonController : Controller
     {
         private readonly ILogger<PersonController> _logger;
-        private readonly ITestLogic _testLogic;
+        private readonly IUserLogic _testLogic;
 
-        public PersonController(ILogger<PersonController> logger, ITestLogic testLogic)
+        public PersonController(ILogger<PersonController> logger, IUserLogic testLogic)
         {
             _logger = logger;
             _testLogic = testLogic;
@@ -37,7 +37,7 @@ namespace OEF_Social_Service.Controllers
         {
             try
             {
-                _testLogic.followPerson(person1, person2);
+                _testLogic.FollowPerson(person1, person2);
             }
             catch (Exception e)
             {
@@ -48,14 +48,14 @@ namespace OEF_Social_Service.Controllers
         [HttpGet("getRequest")]
         public IActionResult getRequest(string person)
         {
-                var i = _testLogic.getRequests(person);
+                var i = _testLogic.GetRequests(person);
                 return Ok(i.Result);
         }
 
         [HttpDelete("getRequest")]
         public IActionResult deleteFollower(string person1, string person2)
         {
-            _testLogic.deletePerson(person1, person2);
+            _testLogic.DeletePerson(person1, person2);
             return Ok();
         }
 

@@ -50,7 +50,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task SendRequest(string person1, string person2)
         {
-            var i = DoesRelationExist(person1, person2).Result;
+            //var relationExists = DoesRelationExist(person1, person2).Result;
             var statementText = new StringBuilder();
             statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
             var statementParameters = new Dictionary<string, object>
@@ -62,6 +62,8 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
+
+
         }
 
         public async Task<string> GetRequests(string person)
@@ -86,7 +88,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public async Task<bool> DoesRelationExist(string person1, string person2)
         {
             var statementText = new StringBuilder();
-            statementText.Append("Match (p:Person {Firstname:$firstname}), (b:Person {Firstname: $firstname2}) RETURN EXISTS((p)-[:Request_Send]->(b))");
+            statementText.Append("Match (p:Person {Firstname:$firstname}), (b:Person {Firstname: $firstname2}) RETURN EXISTS((p)-[]->(b))");
             var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", person1},
@@ -108,6 +110,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                         return false;
                     }
                 }
+                return false;
             }
         }
 

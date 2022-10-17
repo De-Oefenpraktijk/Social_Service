@@ -42,5 +42,6 @@ namespace OEF_Social_Service.Services
         {
             _followService.AcceptRelation(person1, person2);
         }
+        
     }
 }

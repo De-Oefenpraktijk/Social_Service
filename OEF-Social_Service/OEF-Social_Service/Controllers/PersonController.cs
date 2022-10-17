@@ -66,17 +66,17 @@ namespace OEF_Social_Service.Controllers
         }
 
         //[HttpPost("get")]
-        //public IActionResult GetUser(string name)
+        //public IActionResult DoesRelationExists(string name)
         //{
-        //    try
-        //    {
-        //        _testLogic.SearchPersonsByName(name);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(new { message = e.Message });
-        //    }
-        //    return Ok();
+        ////    try
+        ////    {
+        ////        _testLogic.relat(name);
+        ////    }
+        ////    catch (Exception e)
+        ////    {
+        ////        return BadRequest(new { message = e.Message });
+        ////    }
+        ////    return Ok();
         //}
     }
 }

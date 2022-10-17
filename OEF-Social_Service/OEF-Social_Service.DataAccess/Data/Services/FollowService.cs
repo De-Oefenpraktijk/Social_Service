@@ -96,9 +96,18 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
                 var result = query.ToListAsync();
-                var i = JsonSerializer.Serialize(result);
-                Console.WriteLine(i);
-                return true;
+                foreach (var item in result.Result[0].Values)
+                {
+                   var ewa = item.Value;
+                    if ((bool)ewa == true)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
 

@@ -4,6 +4,7 @@ using Neo4j.Driver;
 using OEF_Social_Service.Composition;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
 using OEF_Social_Service.Models;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 
@@ -12,6 +13,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
     public class FollowService : IFollowService
     {
         private IAsyncSession _session;
+        private IAsyncSession _session2;
         private string _database;
         public Person _person;
 
@@ -19,6 +21,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         {
             _database = appSettingsOptions.Value.Neo4jDatabase;
             _session = driver.AsyncSession(o => o.WithDatabase(_database));
+            _session2 = driver.AsyncSession(o => o.WithDatabase(_database));
         }
 
         public async Task CreateUser(Person person)
@@ -50,7 +53,8 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task SendRequest(string person1, string person2)
         {
-            //var relationExists = DoesRelationExist(person1, person2).Result;
+
+            var test = DoesRelationExist(person1, person2).Result;
             var statementText = new StringBuilder();
             statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
             var statementParameters = new Dictionary<string, object>
@@ -60,7 +64,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             };
             using (_session)
             {
-                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+                //_session.LastBookmark.Values(null);
+                
+                var i = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
 
 
@@ -94,17 +100,16 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 {"firstname", person1},
                 {"firstname2", person2}
             };
-            using (_session)
+            using (_session2)
             {
-                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+                var query = await _session2.RunAsync(statementText.ToString(), statementParameters);
                 var result = query.ToListAsync();
                 foreach (var item in result.Result[0].Values)
                 {
-                   var ewa = item.Value;
-                    if ((bool)ewa == true)
+                    if ((bool)item.Value == true)
                     {
                         return true;
-                    }
+    }
                     else
                     {
                         return false;

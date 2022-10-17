@@ -86,7 +86,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public async Task<bool> DoesRelationExist(string person1, string person2)
         {
             var statementText = new StringBuilder();
-            statementText.Append("Match (p:Person {Firstname:$firstname}), (b:Person {Firstname:$firstname2}) RETURN EXISTS((p)-[:Request_Send]-(b))");
+            statementText.Append("Match (p:Person {Firstname:$firstname}), (b:Person {Firstname: $firstname2}) RETURN EXISTS((p)-[:Request_Send]->(b))");
             var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", person1},

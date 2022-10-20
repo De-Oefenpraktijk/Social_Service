@@ -13,15 +13,15 @@ namespace OEF_Social_Service.DataAccess.Data.Services
     public class FollowService : IFollowService
     {
         private IAsyncSession _session;
-        private IAsyncSession _session2;
         private string _database;
         public Person _person;
+        private IAsyncSession replicaSession;
 
         public FollowService(IDriver driver, ILogger<FollowService> logger, IOptions<ApplicationSettings> appSettingsOptions)
         {
             _database = appSettingsOptions.Value.Neo4jDatabase;
             _session = driver.AsyncSession(o => o.WithDatabase(_database));
-            _session2 = driver.AsyncSession(o => o.WithDatabase(_database));
+            replicaSession = driver.AsyncSession(o => o.WithDatabase(_database));
         }
 
         public async Task CreateUser(Person person)
@@ -108,9 +108,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 {"firstname2", person2}
             };
 
-            using (_session2)
+            using (replicaSession)
             {
-                var query = await _session2.RunAsync(statementText.ToString(), statementParameters);
+                var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
                 var result = query.ToListAsync();
                 foreach (var item in result.Result[0].Values)
                 {

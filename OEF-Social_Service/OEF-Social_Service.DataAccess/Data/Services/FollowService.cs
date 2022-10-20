@@ -53,21 +53,27 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task SendRequest(string person1, string person2)
         {
-
-            var test = DoesRelationExist(person1, person2).Result;
-            var statementText = new StringBuilder();
-            statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
-            var statementParameters = new Dictionary<string, object>
+            if( person1 == person2)
+            {
+                return;
+            }
+            else
+            {
+                var test = DoesRelationExist(person1, person2).Result;
+                var statementText = new StringBuilder();
+                statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
+                var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", person1},
                 {"firstname2", person2}
             };
-            using (_session)
-            {
-                //_session.LastBookmark.Values(null);
-                
-                var i = await _session.RunAsync(statementText.ToString(), statementParameters);
+                using (_session)
+                {
+                    //_session.LastBookmark.Values(null);
+                    var i = await _session.RunAsync(statementText.ToString(), statementParameters);
+                }
             }
+
 
 
         }
@@ -81,6 +87,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 {"firstname", person},
             };
+            
             using (_session)    
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
@@ -100,6 +107,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 {"firstname", person1},
                 {"firstname2", person2}
             };
+
             using (_session2)
             {
                 var query = await _session2.RunAsync(statementText.ToString(), statementParameters);

@@ -10,12 +10,12 @@ namespace OEF_Social_Service.Controllers
     public class PersonController : Controller
     {
         private readonly ILogger<PersonController> _logger;
-        private readonly IUserLogic _testLogic;
+        private readonly IUserLogic _userLogic;
 
-        public PersonController(ILogger<PersonController> logger, IUserLogic testLogic)
+        public PersonController(ILogger<PersonController> logger, IUserLogic userLogic)
         {
             _logger = logger;
-            _testLogic = testLogic;
+            _userLogic = userLogic;
         }
 
         [HttpPost("createUser")]
@@ -23,7 +23,7 @@ namespace OEF_Social_Service.Controllers
         {
             try
             {
-                _testLogic.CreatePerson(person);
+                _userLogic.CreatePerson(person);
             }
             catch (Exception e)
             {
@@ -37,7 +37,7 @@ namespace OEF_Social_Service.Controllers
         {
             try
             {
-                _testLogic.FollowPerson(person1, person2);
+                _userLogic.FollowPerson(person1, person2);
             }
             catch (Exception e)
             {
@@ -48,35 +48,21 @@ namespace OEF_Social_Service.Controllers
         [HttpGet("getRequest")]
         public IActionResult getRequest(string person)
         {
-                var i = _testLogic.GetRequests(person);
+                var i = _userLogic.GetRequests(person);
                 return Ok(i.Result);
         }
 
         [HttpDelete("DeleteRelation")]
         public IActionResult DeleteRelation(string person1, string person2)
         {
-            _testLogic.DeleteRelation(person1, person2);
+            _userLogic.DeleteRelation(person1, person2);
             return Ok();
         }
         [HttpPost("AcceptRelation")]
         public IActionResult AcceptRelation(string person1, string person2)
         {
-            _testLogic.AcceptRelation(person1, person2);
+            _userLogic.AcceptRelation(person1, person2);
             return Ok();
         }
-
-        //[HttpPost("get")]
-        //public IActionResult DoesRelationExists(string name)
-        //{
-        ////    try
-        ////    {
-        ////        _testLogic.relat(name);
-        ////    }
-        ////    catch (Exception e)
-        ////    {
-        ////        return BadRequest(new { message = e.Message });
-        ////    }
-        ////    return Ok();
-        //}
     }
 }

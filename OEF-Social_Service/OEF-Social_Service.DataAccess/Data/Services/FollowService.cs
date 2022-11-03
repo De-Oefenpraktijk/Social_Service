@@ -47,43 +47,36 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
                 Console.Write(query);
-                
+
             }
         }
 
         public async Task SendRequest(string person1, string person2)
         {
-            if(person1 == person2)
+            if (person1 == person2)
             {
                 return;
             }
-            else
+            var relationExist = DoesRelationExist(person1, person2).Result;
+            if (relationExist == false)
             {
-                var test = DoesRelationExist(person1, person2).Result;
-                if (test == false)
+                var statementText = new StringBuilder();
+                statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
+                var statementParameters = new Dictionary<string, object>
+                        {
+                        {"firstname", person1},
+                        {"firstname2", person2}
+                        };
+                using (_session)
                 {
-                    var statementText = new StringBuilder();
-                    statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
-                    var statementParameters = new Dictionary<string, object>
-            {
-                {"firstname", person1}, 
-                {"firstname2", person2}
-            };
-                    using (_session)
-                    {
-                        //_session.LastBookmark.Values(null);
-                        var i = await _session.RunAsync(statementText.ToString(), statementParameters);
-                    }
+                    //_session.LastBookmark.Values(null);
+                    var excecuteResult = await _session.RunAsync(statementText.ToString(), statementParameters);
                 }
-                else
-                {
-                    return;
-                }
-
             }
-
-
-
+            if (relationExist == true)
+            {
+                return;
+            }
         }
 
         public async Task<string> GetRequests(string person)
@@ -95,15 +88,13 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 {"firstname", person},
             };
-            
-            using (_session)    
+
+            using (_session)
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
                 var result = await query.ToListAsync();
-                var i = JsonSerializer.Serialize(result);
-                Console.WriteLine(i);
-
-                return i;
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
             }
         }
         public async Task<bool> DoesRelationExist(string person1, string person2)
@@ -125,10 +116,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                     if ((bool)item.Value == true)
                     {
                         return true;
-    }
-                    else
-                    {
-                        return false;
                     }
                 }
                 return false;

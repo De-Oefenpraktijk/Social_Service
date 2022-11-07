@@ -26,7 +26,16 @@ namespace OEF_Social_Service.Services
 
         public void FollowPerson(Guid person1, Guid person2)
         {
-            _followService.SendRequest(person1, person2);
+            try
+            {
+                _followService.SendRequest(person1, person2);
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
 
         public Task<string> GetRequests(Guid person)

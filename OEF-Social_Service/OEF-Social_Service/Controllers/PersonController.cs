@@ -37,6 +37,10 @@ namespace OEF_Social_Service.Controllers
         {
             try
             {
+                if (person1 == person2)
+                {
+                    return BadRequest("You can't send a request to your self");
+                }
                 _userLogic.FollowPerson(person1, person2);
             }
             catch (Exception e)
@@ -55,12 +59,20 @@ namespace OEF_Social_Service.Controllers
         [HttpDelete("DeleteRelation")]
         public IActionResult DeleteRelation(Guid person1, Guid person2)
         {
+            if (person1 == person2)
+            {
+                return BadRequest("You can't delete a request from your self");
+            }
             _userLogic.DeleteRelation(person1, person2);
             return Ok();
         }
         [HttpPost("AcceptRelation")]
         public IActionResult AcceptRelation(Guid person1, Guid person2)
         {
+            if (person1 == person2)
+            {
+                return BadRequest("You can't accept a request to your self");
+            }
             _userLogic.AcceptRelation(person1, person2);
             return Ok();
         }

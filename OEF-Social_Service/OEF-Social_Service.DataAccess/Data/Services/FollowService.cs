@@ -46,39 +46,34 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             using (_session)
             {
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
-                Console.Write(query);
-
             }
         }
 
         public async Task SendRequest(Guid person1, Guid person2)
-        {
-            var personString = person1.ToString();
-            var personString2 = person2.ToString();
-            if (person1 == person2)
-            {
-                return;
-            }
-            var relationExist = DoesRelationExist(personString, personString2).Result;
-            if (relationExist == false)
-            {
-                var statementText = new StringBuilder();
-                statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Id = $userId AND p2.Id = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
-                var statementParameters = new Dictionary<string, object>
+           {
+                var personString = person1.ToString();
+                var personString2 = person2.ToString();
+
+                var relationExist = DoesRelationExist(personString, personString2).Result;
+                if (relationExist == false)
+                {
+                    var statementText = new StringBuilder();
+                    statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Id = $userId AND p2.Id = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
+                    var statementParameters = new Dictionary<string, object>
                         {
                         {"userId", personString},
                         {"userId2", personString2}
                         };
-                using (_session)
-                {
-                    //_session.LastBookmark.Values(null);
-                    var excecuteResult = await _session.RunAsync(statementText.ToString(), statementParameters);
+                    using (_session)
+                    {
+                        //_session.LastBookmark.Values(null);
+                        var excecuteResult = await _session.RunAsync(statementText.ToString(), statementParameters);
+                    }
                 }
-            }
-            if (relationExist == true)
-            {
-                return;
-            }
+                if (relationExist == true)
+                {
+                    return;
+                }
         }
 
         public async Task<string> GetRequests(Guid person)

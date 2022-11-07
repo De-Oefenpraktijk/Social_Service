@@ -53,19 +53,21 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task SendRequest(Guid person1, Guid person2)
         {
+            var personString = person1.ToString();
+            var personString2 = person2.ToString();
             if (person1 == person2)
             {
                 return;
             }
-            var relationExist = DoesRelationExist(person1, person2).Result;
+            var relationExist = DoesRelationExist(personString, personString2).Result;
             if (relationExist == false)
             {
                 var statementText = new StringBuilder();
-                statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Firstname = $firstname AND p2.Firstname = $firstname2 CREATE (p1)-[p:Request_Send] ->(p2)");
+                statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Id = $userId AND p2.Id = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
                 var statementParameters = new Dictionary<string, object>
                         {
-                        {"firstname", person1},
-                        {"firstname2", person2}
+                        {"userId", personString},
+                        {"userId2", personString2}
                         };
                 using (_session)
                 {
@@ -81,12 +83,13 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task<string> GetRequests(Guid person)
         {
+            var personString = person.ToString();
             var data = new List<Person>();
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person)-[r:Request_Send]->({Firstname: $firstname}) Return user");
+            statementText.Append("Match (user:Person)-[r:Request_Send]->({Id: $firstname}) Return user");
             var statementParameters = new Dictionary<string, object>
             {
-                {"firstname", person},
+                {"firstname", personString},
             };
 
             using (_session)
@@ -97,14 +100,14 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 return serializedResult;
             }
         }
-        public async Task<bool> DoesRelationExist(Guid person1, Guid person2)
+        public async Task<bool> DoesRelationExist(string person1, string person2)
         {
             var statementText = new StringBuilder();
-            statementText.Append("Match (p:Person {Firstname:$firstname}), (b:Person {Firstname: $firstname2}) RETURN EXISTS((p)-[]->(b))");
+            statementText.Append("Match (p:Person {Id:$userId}), (b:Person {Id: $userId2}) RETURN EXISTS((p)-[]->(b))");
             var statementParameters = new Dictionary<string, object>
             {
-                {"firstname", person1},
-                {"firstname2", person2}
+                {"userId", person1},
+                {"userId2", person2}
             };
 
             using (replicaSession)
@@ -124,12 +127,15 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task DeleteRelation(Guid person1, Guid person2)
         {
+            var personString = person1.ToString();
+            var personString2 = person2.ToString();
+
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person)-[r]->({Firstname: $firstname2}) Where ({Firstname: $firstname})-[r]->() DELETE r");
+            statementText.Append("Match (user:Person)-[r]->({Id: $userId2}) Where ({Id: $userId})-[r]->() DELETE r");
             var statementParameters = new Dictionary<string, object>
             {
-                {"firstname", person1},
-                {"firstname2", person2}
+                {"userId", personString},
+                {"userId2", personString2}
             };
             using (_session)
             {
@@ -138,12 +144,15 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         }
         public async Task AcceptRelation(Guid person1, Guid person2)
         {
+            var personString = person1.ToString();
+            var personString2 = person2.ToString();
+
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person {Firstname: $firstname})-[r:Request_Send]->(m:Person {Firstname:$firstname2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
+            statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Send]->(m:Person {Id:$userId2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
             var statementParameters = new Dictionary<string, object>
             {
-                {"firstname", person2},
-                {"firstname2", person1}
+                {"userId", personString2},
+                {"userId2", personString}
             };
             using (_session)
             {

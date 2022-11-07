@@ -11,9 +11,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
     public interface IFollowService
     {
         Task CreateUser(Person person);
-        Task SendRequest(string person1, string person2);
-        Task<string> GetRequests(string person);
-        Task DeleteRelation(string person1, string person2);
-        Task AcceptRelation(string person1, string person2);
+        Task SendRequest(Guid person1, Guid person2);
+        Task<string> GetRequests(Guid person);
+        Task DeleteRelation(Guid person1, Guid person2);
+        Task AcceptRelation(Guid person1, Guid person2);
     }
 }

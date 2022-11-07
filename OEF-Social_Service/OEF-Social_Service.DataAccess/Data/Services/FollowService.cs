@@ -51,7 +51,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task SendRequest(string person1, string person2)
+        public async Task SendRequest(Guid person1, Guid person2)
         {
             if (person1 == person2)
             {
@@ -79,7 +79,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task<string> GetRequests(string person)
+        public async Task<string> GetRequests(Guid person)
         {
             var data = new List<Person>();
             var statementText = new StringBuilder();
@@ -97,7 +97,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 return serializedResult;
             }
         }
-        public async Task<bool> DoesRelationExist(string person1, string person2)
+        public async Task<bool> DoesRelationExist(Guid person1, Guid person2)
         {
             var statementText = new StringBuilder();
             statementText.Append("Match (p:Person {Firstname:$firstname}), (b:Person {Firstname: $firstname2}) RETURN EXISTS((p)-[]->(b))");
@@ -122,7 +122,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task DeleteRelation(string person1, string person2)
+        public async Task DeleteRelation(Guid person1, Guid person2)
         {
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person)-[r]->({Firstname: $firstname2}) Where ({Firstname: $firstname})-[r]->() DELETE r");
@@ -136,7 +136,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
         }
-        public async Task AcceptRelation(string person1, string person2)
+        public async Task AcceptRelation(Guid person1, Guid person2)
         {
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person {Firstname: $firstname})-[r:Request_Send]->(m:Person {Firstname:$firstname2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");

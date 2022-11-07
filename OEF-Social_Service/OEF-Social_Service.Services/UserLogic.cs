@@ -24,21 +24,21 @@ namespace OEF_Social_Service.Services
             _followService.CreateUser(person);
         }
 
-        public void FollowPerson(string person1, string person2)
+        public void FollowPerson(Guid person1, Guid person2)
         {
             _followService.SendRequest(person1, person2);
         }
 
-        public Task<string> GetRequests(string person)
+        public Task<string> GetRequests(Guid person)
         {
                 return _followService.GetRequests(person);
         }
 
-        public void DeleteRelation(string person1, string person2)
+        public void DeleteRelation(Guid person1, Guid person2)
         {
             _followService.DeleteRelation(person1, person2);
         }
-        public void AcceptRelation(string person1, string person2)
+        public void AcceptRelation(Guid person1, Guid person2)
         {
             _followService.AcceptRelation(person1, person2);
         }

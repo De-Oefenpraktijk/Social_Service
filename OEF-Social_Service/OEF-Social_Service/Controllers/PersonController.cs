@@ -33,7 +33,7 @@ namespace OEF_Social_Service.Controllers
         }
 
         [HttpPost("followUser")]
-        public IActionResult followUser(string person1, string person2)
+        public IActionResult followUser(Guid person1, Guid person2)
         {
             try
             {
@@ -46,20 +46,20 @@ namespace OEF_Social_Service.Controllers
             return Ok();
         }
         [HttpGet("getRequest")]
-        public IActionResult getRequest(string person)
+        public IActionResult getRequest(Guid person)
         {
                 var i = _userLogic.GetRequests(person);
                 return Ok(i.Result);
         }
 
         [HttpDelete("DeleteRelation")]
-        public IActionResult DeleteRelation(string person1, string person2)
+        public IActionResult DeleteRelation(Guid person1, Guid person2)
         {
             _userLogic.DeleteRelation(person1, person2);
             return Ok();
         }
         [HttpPost("AcceptRelation")]
-        public IActionResult AcceptRelation(string person1, string person2)
+        public IActionResult AcceptRelation(Guid person1, Guid person2)
         {
             _userLogic.AcceptRelation(person1, person2);
             return Ok();

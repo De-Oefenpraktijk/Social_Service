@@ -11,9 +11,9 @@ namespace OEF_Social_Service.Services.Interfaces
     public interface IUserLogic
     {
         void CreatePerson(Person person);
-        void FollowPerson(string person1, string person2);
-        Task<string> GetRequests(string person);
-        void DeleteRelation(string person1, string person2);
-        void AcceptRelation(string person1, string person2);
+        void FollowPerson(Guid person1, Guid person2);
+        Task<string> GetRequests(Guid person);
+        void DeleteRelation(Guid person1, Guid person2);
+        void AcceptRelation(Guid person1, Guid person2);
     }
 }

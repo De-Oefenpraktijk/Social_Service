@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using OEF_Social_Service.Composition;
 using OEF_Social_Service.Composition.Installer;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
@@ -9,6 +10,11 @@ new DbInstaller().InstallServices(builder.Services, builder.Configuration);
 new ServiceInstaller().InstallServices(builder.Services, builder.Configuration);
 new LogicInstaller().InstallServices(builder.Services, builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = ApiVersion.Default; //1.0
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

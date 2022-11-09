@@ -17,7 +17,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public Person _person;
         private IAsyncSession replicaSession;
 
-        public FollowService(IDriver driver, ILogger<FollowService> logger, IOptions<ApplicationSettings> appSettingsOptions)
+        public FollowService(IDriver driver, IOptions<ApplicationSettings> appSettingsOptions)
         {
             _database = appSettingsOptions.Value.Neo4jDatabase;
             _session = driver.AsyncSession(o => o.WithDatabase(_database));
@@ -51,18 +51,18 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task SendRequest(Guid person1, Guid person2)
            {
-                var personString = person1.ToString();
-                var personString2 = person2.ToString();
+                var requester = person1.ToString();
+                var requestee = person2.ToString();
 
-                var relationExist = DoesRelationExist(personString, personString2).Result;
+                var relationExist = DoesRelationExist(requester, requestee).Result;
                 if (relationExist == false)
                 {
                     var statementText = new StringBuilder();
                     statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Id = $userId AND p2.Id = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
                     var statementParameters = new Dictionary<string, object>
                         {
-                        {"userId", personString},
-                        {"userId2", personString2}
+                        {"userId", requester},
+                        {"userId2", requestee}
                         };
                     using (_session)
                     {
@@ -122,15 +122,15 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
         public async Task DeleteRelation(Guid person1, Guid person2)
         {
-            var personString = person1.ToString();
-            var personString2 = person2.ToString();
+            var requester = person1.ToString();
+            var requestee = person2.ToString();
 
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person)-[r]->({Id: $userId2}) Where ({Id: $userId})-[r]->() DELETE r");
             var statementParameters = new Dictionary<string, object>
             {
-                {"userId", personString},
-                {"userId2", personString2}
+                {"userId", requester},
+                {"userId2", requestee}
             };
             using (_session)
             {
@@ -139,15 +139,15 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         }
         public async Task AcceptRelation(Guid person1, Guid person2)
         {
-            var personString = person1.ToString();
-            var personString2 = person2.ToString();
+            var requester = person1.ToString();
+            var requestee = person2.ToString();
 
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Send]->(m:Person {Id:$userId2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
             var statementParameters = new Dictionary<string, object>
             {
-                {"userId", personString2},
-                {"userId2", personString}
+                {"userId", requestee},
+                {"userId2", requester}
             };
             using (_session)
             {

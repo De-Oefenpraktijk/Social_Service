@@ -7,6 +7,7 @@ namespace OEF_Social_Service.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiVersion("1.0")]
     public class PersonController : Controller
     {
         private readonly ILogger<PersonController> _logger;

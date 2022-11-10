@@ -2,9 +2,27 @@ using Microsoft.Extensions.Configuration;
 using OEF_Social_Service.Composition;
 using OEF_Social_Service.Composition.Installer;
 using Microsoft.AspNetCore.Mvc;
+using MassTransit;
+using EventBus.Messages.Common;
+using OEF_Social_Service.EventBus.Consumer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
+
+builder.Services.AddMassTransit(config =>
+{
+    config.AddConsumer<ProfileUpdatedConsumer>();
+
+    config.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+        cfg.ReceiveEndpoint(EventBusConstants.PROFILEUPDATEDQUEUE, c =>
+        {
+            c.ConfigureConsumer<ProfileUpdatedConsumer>(ctx);
+        });
+    });
+});
+
 // Add services to the container.
 new DbInstaller().InstallServices(builder.Services, builder.Configuration);
 new ServiceInstaller().InstallServices(builder.Services, builder.Configuration);

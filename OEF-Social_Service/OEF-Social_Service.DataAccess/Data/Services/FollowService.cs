@@ -95,6 +95,27 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 return serializedResult;
             }
         }
+        public async Task<string> GetRelatedUsers(Guid person)
+        {
+            var requestee = person.ToString();
+            var data = new List<Person>();
+            var statementText = new StringBuilder();
+            statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Accepted*1..3]-(b) Return b");
+            //statementText.Append("Match (user:Person)-[r:Request_Send]->({Id: $firstname}) Return user");
+            var statementParameters = new Dictionary<string, object>
+            {
+                {"userId", requestee},
+            };
+
+            using (_session)
+            {
+                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+                var result = await query.ToListAsync();
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
+            }
+        }
+
         public async Task<bool> DoesRelationExist(string person1, string person2)
         {
             var statementText = new StringBuilder();

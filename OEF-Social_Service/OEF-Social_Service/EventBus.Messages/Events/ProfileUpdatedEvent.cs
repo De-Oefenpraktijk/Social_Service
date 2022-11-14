@@ -17,9 +17,9 @@
 
         public string? Role { get; set; }
 
-        public string? Institutions { get; set; }
+        public List<string>? Institutions { get; set; }
 
-        public string? Themes { get; set; }
+        public List<string>? Themes { get; set; }
 
         public string? ResidencePlace { get; set; }
     }

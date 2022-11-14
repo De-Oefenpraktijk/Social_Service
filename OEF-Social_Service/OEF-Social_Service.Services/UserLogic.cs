@@ -13,9 +13,9 @@ namespace OEF_Social_Service.Services
 {
     public class UserLogic : IUserLogic
     {
-        private readonly IFollowService _followService;
+        private readonly DataAccess.Data.Services.Interfaces.IFollowService _followService;
 
-        public UserLogic(IFollowService followService)
+        public UserLogic(DataAccess.Data.Services.Interfaces.IFollowService followService)
         {
             _followService = followService; 
         }
@@ -23,6 +23,15 @@ namespace OEF_Social_Service.Services
         public void CreatePerson(Person person)
         {
             _followService.CreateUser(person);
+        }
+        public Task<string> GetUser(string username)
+        {
+            return _followService.GetUser(username);
+        }
+
+        public void UpdatePerson(Person person)
+        {
+           _followService.UpdateUser(person);
         }
 
         public void FollowPerson(Guid person1, Guid person2)

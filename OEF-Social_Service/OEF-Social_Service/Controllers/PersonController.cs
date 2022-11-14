@@ -33,6 +33,12 @@ namespace OEF_Social_Service.Controllers
             }
             return Ok();
         }
+        [HttpGet("getUser")]
+        public IActionResult getUser(string username)
+        {
+            var i = _userLogic.GetUser(username);
+            return Ok(i.Result);
+        }
 
         [HttpPost("followUser")]
         public IActionResult followUser(Guid person1, Guid person2)

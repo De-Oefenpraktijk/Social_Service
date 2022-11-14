@@ -17,9 +17,9 @@
 
         public string? Role { get; set; }
 
-        public List<string>? Institutions { get; set; }
+        public List<string>? Educations { get; set; }
 
-        public List<string>? Themes { get; set; }
+        public List<string>? Specializations { get; set; }
 
         public string? ResidencePlace { get; set; }
     }

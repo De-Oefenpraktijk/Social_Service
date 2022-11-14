@@ -22,6 +22,7 @@ builder.Services.AddMassTransit(config =>
         });
     });
 });
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Add services to the container.
 new DbInstaller().InstallServices(builder.Services, builder.Configuration);

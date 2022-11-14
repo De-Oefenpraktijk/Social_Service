@@ -4,6 +4,7 @@ using Neo4j.Driver;
 using OEF_Social_Service.Composition;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
 using OEF_Social_Service.Models;
+using System;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -27,7 +28,8 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public async Task CreateUser(Person person)
         {
             var statementText = new StringBuilder();
-            statementText.Append("CREATE (n:Person {Id : $id, Firstname: $firstname, Lastname: $lastname, Username: $username, Email: $emailAddress, Password: $password, EnrollmentDate: $enrollmentDate, Role: $role, Institution: $institution, Theme: $theme, ResidencePlace: $residencePlace})");
+            statementText.Append("CREATE (n:Person {Id : $id, Firstname: $firstname, Lastname: $lastname, Username: $username, Email: $emailAddress, Password: $password, EnrollmentDate: $enrollmentDate, Role: $role, Educations: $educations, Specializations: $specializations, ResidencePlace: $residencePlace})");
+
             var statementParameters = new Dictionary<string, object>
             {
                 {"id", person.Id.ToString()},
@@ -38,8 +40,8 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 {"password", person.Password},
                 {"enrollmentDate", person.EnrollmentDate.ToShortDateString()},
                 {"role", person.Role},
-                {"institution", person.Institution},
-                {"theme", person.Theme},
+                {"educations", person.Educations},
+                {"specializations", person.Specializations},
                 {"residencePlace", person.ResidencePlace}
             };
 
@@ -48,6 +50,48 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
         }
+        public async Task<string> GetUser(string username)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (n) WHERE n.Username = $username Return n");
+            var statementParameters = new Dictionary<string, object>
+            {
+                { "username", username }
+            };
+            using (replicaSession)
+            {
+                var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                var result = await query.ToListAsync();
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
+            }
+        }
+
+        public async Task UpdateUser(Person person)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (n:Person {Username: $username}) set n = {Id : $id, Firstname: $firstname, Lastname: $lastname, Username: $username, Email: $emailAddress, Password: $password, EnrollmentDate: $enrollmentDate, Role: $role, Educations: $educations, Specializations: $specializations, ResidencePlace: $residencePlace} return n");
+            var statementParameters = new Dictionary<string, object>
+            {
+                {"id", person.Id.ToString()},
+                {"firstname", person.FirstName},
+                {"lastname", person.LastName},
+                {"username", person.Username},
+                {"emailAddress", person.EmailAddress},
+                {"password", person.Password},
+                {"enrollmentDate", person.EnrollmentDate.ToShortDateString()},
+                {"role", person.Role},
+                {"educations", person.Educations},
+                {"specializations", person.Specializations},
+                {"residencePlace", person.ResidencePlace}
+            };
+
+            using (_session)
+            {
+                var query = await _session.RunAsync(statementText.ToString(), statementParameters);
+            }
+        }
+
 
         public async Task SendRequest(Guid person1, Guid person2)
            {

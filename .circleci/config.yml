@@ -57,7 +57,7 @@ workflows:
                 - main
       - azure-acr/build-and-push-image:
           dockerfile: Dockerfile # defaults to `Dockerfile`
-          path: ./OEF-Social_Service\OEF-Social_Service # Defaults to working directory
+          path: OEF-Social_Service # Defaults to working directory
           login-server-name: oefenpraktijkregistry.azurecr.io # e.g. {yourregistryname}.azure.io
           registry-name: OefenpraktijkRegistry
           repo: socialservice

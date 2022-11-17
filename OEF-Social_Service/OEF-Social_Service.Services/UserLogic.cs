@@ -1,4 +1,5 @@
 ﻿using Neo4j.Driver;
+using OEF_Social_Service.DataAccess.Data.Services;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
 using OEF_Social_Service.Models;
 using OEF_Social_Service.Services.Interfaces;
@@ -12,9 +13,9 @@ namespace OEF_Social_Service.Services
 {
     public class UserLogic : IUserLogic
     {
-        private readonly IFollowService _followService;
+        private readonly DataAccess.Data.Services.Interfaces.IFollowService _followService;
 
-        public UserLogic(IFollowService followService)
+        public UserLogic(DataAccess.Data.Services.Interfaces.IFollowService followService)
         {
             _followService = followService; 
         }
@@ -22,6 +23,15 @@ namespace OEF_Social_Service.Services
         public void CreatePerson(Person person)
         {
             _followService.CreateUser(person);
+        }
+        public Task<string> GetUser(string username)
+        {
+            return _followService.GetUser(username);
+        }
+
+        public void UpdatePerson(Person person)
+        {
+           _followService.UpdateUser(person);
         }
 
         public void FollowPerson(Guid person1, Guid person2)
@@ -51,6 +61,19 @@ namespace OEF_Social_Service.Services
         {
             _followService.AcceptRelation(person1, person2);
         }
-        
+
+        public Task<string> GetRecommendations(Guid person)
+        {
+            try
+            {
+                var relatedUsers = _followService.GetRelatedUsers(person);
+                return (relatedUsers);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

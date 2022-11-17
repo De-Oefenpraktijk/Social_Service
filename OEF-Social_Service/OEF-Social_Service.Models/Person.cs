@@ -27,8 +27,8 @@ namespace OEF_Social_Service.Models
         public DateTime EnrollmentDate { get; set; } = DateTime.Now;
         [Required]
         public string Role { get; set; } = "User";
-        public string Institution { get; set; } = String.Empty;
-        public string Theme { get; set; } = String.Empty;
+        public List<string>? Educations { get; set; }
+        public List<string>? Specializations { get; set; }
         public string ResidencePlace { get; set; } = String.Empty;
     }
 }

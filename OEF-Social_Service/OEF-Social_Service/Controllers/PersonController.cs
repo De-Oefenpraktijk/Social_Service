@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OEF_Social_Service.Models;
+using OEF_Social_Service.Services;
 using OEF_Social_Service.Services.Interfaces;
 using System.Net;
 
@@ -32,6 +33,12 @@ namespace OEF_Social_Service.Controllers
             }
             return Ok();
         }
+        [HttpGet("getUser")]
+        public IActionResult getUser(string username)
+        {
+            var i = _userLogic.GetUser(username);
+            return Ok(i.Result);
+        }
 
         [HttpPost("followUser")]
         public IActionResult followUser(Guid person1, Guid person2)
@@ -56,6 +63,12 @@ namespace OEF_Social_Service.Controllers
                 var i = _userLogic.GetRequests(person);
                 return Ok(i.Result);
         }
+        [HttpGet("getRecommendation")]
+        public IActionResult GetRecommendation(Guid person)
+        {
+            var message = _userLogic.GetRecommendations(person);
+            return Ok(message.Result);
+        }
 
         [HttpDelete("DeleteRelation")]
         public IActionResult DeleteRelation(Guid person1, Guid person2)
@@ -77,5 +90,6 @@ namespace OEF_Social_Service.Controllers
             _userLogic.AcceptRelation(person1, person2);
             return Ok();
         }
+
     }
 }

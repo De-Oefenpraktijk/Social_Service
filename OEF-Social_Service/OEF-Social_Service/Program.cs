@@ -38,6 +38,7 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Add cors policy
 builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 {
     builder.WithOrigins("http://localhost:5173")

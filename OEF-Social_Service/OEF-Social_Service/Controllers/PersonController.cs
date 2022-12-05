@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using OEF_Social_Service.Models;
 using OEF_Social_Service.Services;
 using OEF_Social_Service.Services.Interfaces;
@@ -9,6 +10,7 @@ namespace OEF_Social_Service.Controllers
     [ApiController]
     [Route("[controller]")]
     [ApiVersion("1.0")]
+    [EnableCors]
     public class PersonController : Controller
     {
         private readonly ILogger<PersonController> _logger;

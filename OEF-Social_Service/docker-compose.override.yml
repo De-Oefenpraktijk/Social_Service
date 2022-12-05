@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  oef-social_service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8000:80"
+
+  db.neo4j:
+    container_name: "db.neo4j"
+    restart: always
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes: 
+      - neo4j_data:$HOME/neo4j/data

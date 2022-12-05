@@ -1,16 +1,14 @@
 version: 2.1
 
+orbs:
+    azure-acr: circleci/azure-acr@0.2.1
+
 jobs:
-  build:
+  publish:
     docker:
-      - image: mcr.microsoft.com/dotnet/sdk:6.0
+      - image: cimg/node:17.2.0
     steps:
-      - checkout
-      - run:
-          working_directory: OEF-Social_Service/OEF-Social_Service
-          name: build solution
-          command: |
-            dotnet build
+      - run: echo "hello world"
 
   test:
     docker:
@@ -18,18 +16,52 @@ jobs:
     steps:
       - checkout
       - run:
-          working_directory: OEF-Social_Service/OEF-Social_UnitTest
-          name: Run unittests
-          command: |
-            dotnet test
+          working_directory: OEF-Social_Service/OEF-Social_Service
+          name: build solution
+          command: | 
+            dotnet restore
+            dotnet build
       - run:
-          working_directory: OEF-Social_Service/OEF-Social_IntegrationTest
+          working_directory: OEF-Social_Service/OEF-Social_Service.Services.XUnit
+          name: Run unittests
+          command: dotnet test
+      - run:
+          working_directory: OEF-Social_Service/OEF-Social_Service.XIntegration
           name: Run integrationtests
+          command: dotnet test
+      - run:
+          working_directory: OEF-Social_Service/OEF-Social_Service
+          name: Install & Run SonarScan and publish to "docker.rayco.digital:9000"
           command: |
-            dotnet test
+            mkdir -p /usr/share/man/man1 && apt-get update && apt-get install -y --no-install-recommends openjdk-11-jre-headless && rm -rf /var/lib/apt/lists/*
+            export JAVA_VER=11
+            export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+            export PATH="${PATH}:/root/.dotnet/tools"
+            dotnet new tool-manifest --force
+            dotnet tool install dotnet-sonarscanner
+            dotnet sonarscanner begin /k:"oefenpraktijk-social" /d:sonar.host.url="http://185.182.185.197:9000" /d:sonar.login=$SONARQUBE_LOGIN
+            dotnet build
+            dotnet sonarscanner end /d:sonar.login=$SONARQUBE_LOGIN
+
 
 workflows:
-  sample: 
+  workflow: 
     jobs:
-      - build
       - test
+      - publish:
+          requires: 
+            - test
+          filters:
+            branches:
+              only: 
+                - main
+      - azure-acr/build-and-push-image:
+          dockerfile: Dockerfile # defaults to `Dockerfile`
+          path: OEF-Social_Service # Defaults to working directory
+          login-server-name: oefenpraktijkregistry.azurecr.io # e.g. {yourregistryname}.azure.io
+          registry-name: OefenpraktijkRegistry
+          repo: socialservice
+          filters:
+            branches:
+                only: main
+

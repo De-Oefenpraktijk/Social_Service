@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  oef-social_service:
+    image: ${DOCKER_REGISTRY-}oefsocialservice
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  db.neo4j:
+    image: neo4j
+
+volumes:
+  neo4j_data:

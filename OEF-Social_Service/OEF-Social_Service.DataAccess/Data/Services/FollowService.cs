@@ -243,10 +243,10 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public async Task<string> GetAllUsers(string firstname)
         {
             var statementText = new StringBuilder();
-            statementText.Append("MATCH (n) WHERE n.Firstname = firstname Return n");
+            statementText.Append("MATCH (n) WHERE n.Firstname = $firstname Return n");
             var statementParameters = new Dictionary<string, object>
             {
-                { "username", firstname }
+                { "firstname", firstname }
             };
             using (replicaSession)
             {

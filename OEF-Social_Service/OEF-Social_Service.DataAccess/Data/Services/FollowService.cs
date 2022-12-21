@@ -219,5 +219,22 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
         }
+
+        public async Task<string> GetAllUsers(string firstname)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (n) WHERE n.Firstname = firstname Return n");
+            var statementParameters = new Dictionary<string, object>
+            {
+                { "username", firstname }
+            };
+            using (replicaSession)
+            {
+                var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                var result = await query.ToListAsync();
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
+            }
+        }
     }
 }

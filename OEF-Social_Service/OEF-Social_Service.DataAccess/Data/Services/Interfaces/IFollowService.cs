@@ -18,5 +18,6 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
         Task<string> GetRelatedUsers(Guid person);
         Task DeleteRelation(Guid person1, Guid person2);
         Task AcceptRelation(Guid person1, Guid person2);
+        Task<string> GetAllUsers(string firstname);
     }
 }

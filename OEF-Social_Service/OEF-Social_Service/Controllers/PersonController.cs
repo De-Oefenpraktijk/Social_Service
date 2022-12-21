@@ -91,5 +91,11 @@ namespace OEF_Social_Service.Controllers
             return Ok();
         }
 
+        [HttpGet("getAllUsers")]
+        public IActionResult getAllUsers(string firstname)
+        {
+            var i = _userLogic.GetAllUsers(firstname);
+            return Ok(i.Result);
+        }
     }
 }

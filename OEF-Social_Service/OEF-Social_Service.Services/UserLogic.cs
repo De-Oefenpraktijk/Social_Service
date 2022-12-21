@@ -75,5 +75,19 @@ namespace OEF_Social_Service.Services
                 throw e;
             }
         }
+
+        public Task<string> GetFollowingUsers(Guid person)
+        {
+            try
+            {
+                var relatedUsers = _followService.GetFollowingUsers(person);
+                return (relatedUsers);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

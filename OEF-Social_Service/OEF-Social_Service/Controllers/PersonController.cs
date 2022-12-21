@@ -93,5 +93,12 @@ namespace OEF_Social_Service.Controllers
             return Ok();
         }
 
+        [HttpGet("getFollowingUsers")]
+        public IActionResult GetFollowingUsers(Guid person)
+        {
+            var message = _userLogic.GetFollowingUsers(person);
+            return Ok(message.Result);
+        }
+
     }
 }

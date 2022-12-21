@@ -13,12 +13,12 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
         Task CreateUser(Person person);
         Task<string> GetUser(string username);
         Task UpdateUser(Person person);
-        Task SendRequest(Guid person1, Guid person2);
-        Task<string> GetRequests(Guid person);
-        Task<string> GetRelatedUsers(Guid person);
-        Task DeleteRelation(Guid person1, Guid person2);
-        Task AcceptRelation(Guid person1, Guid person2);
-        Task<string> GetFollowingUsers(Guid person);
-        Task<string> GetAllUsers(string firstname);
+        Task SendRequest(string person1, string person2);
+        Task<string> GetRequests(string person);
+        Task<string> GetRelatedUsers(string person);
+        Task DeleteRelation(string person1, string person2);
+        Task AcceptRelation(string person1, string person2);
+        Task<string> GetFollowingUsers(string person);
+        Task<string> GetAllUsers();
     }
 }

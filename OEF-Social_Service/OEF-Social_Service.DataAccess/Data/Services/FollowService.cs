@@ -32,7 +32,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
             var statementParameters = new Dictionary<string, object>
             {
-                {"id", person.Id.ToString()},
+                {"id", person.Id},
                 {"firstname", person.FirstName},
                 {"lastname", person.LastName},
                 {"username", person.Username},
@@ -73,7 +73,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             statementText.Append("MATCH (n:Person {Username: $username}) set n = {Id : $id, Firstname: $firstname, Lastname: $lastname, Username: $username, Email: $emailAddress, Password: $password, EnrollmentDate: $enrollmentDate, Role: $role, Educations: $educations, Specializations: $specializations, ResidencePlace: $residencePlace} return n");
             var statementParameters = new Dictionary<string, object>
             {
-                {"id", person.Id.ToString()},
+                {"id", person.Id},
                 {"firstname", person.FirstName},
                 {"lastname", person.LastName},
                 {"username", person.Username},
@@ -93,10 +93,10 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         }
 
 
-        public async Task SendRequest(Guid person1, Guid person2)
+        public async Task SendRequest(string person1, string person2)
            {
-                var requester = person1.ToString();
-                var requestee = person2.ToString();
+                var requester = person1;
+                var requestee = person2;
 
                 var relationExist = DoesRelationExist(requester, requestee).Result;
                 if (relationExist == false)
@@ -120,9 +120,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 }
         }
 
-        public async Task<string> GetRequests(Guid person)
+        public async Task<string> GetRequests(string person)
         {
-            var personString = person.ToString();
+            var personString = person;
             var data = new List<Person>();
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person)-[r:Request_Send]->({Id: $firstname}) Return user");
@@ -139,9 +139,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 return serializedResult;
             }
         }
-        public async Task<string> GetRelatedUsers(Guid person)
+        public async Task<string> GetRelatedUsers(string person)
         {
-            var requestee = person.ToString();
+            var requestee = person;
             var data = new List<Person>();
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Accepted*1..3]-(b) Return b");
@@ -160,9 +160,9 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task<string> GetFollowingUsers(Guid person)
+        public async Task<string> GetFollowingUsers(string person)
         {
-            var requestee = person.ToString();
+            var requestee = person;
             var data = new List<Person>();
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Accepted]-(b) Return b");
@@ -206,10 +206,10 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
-        public async Task DeleteRelation(Guid person1, Guid person2)
+        public async Task DeleteRelation(string person1, string person2)
         {
-            var requester = person1.ToString();
-            var requestee = person2.ToString();
+            var requester = person1;
+            var requestee = person2;
 
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person)-[r]->({Id: $userId2}) Where ({Id: $userId})-[r]->() DELETE r");
@@ -223,10 +223,10 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
         }
-        public async Task AcceptRelation(Guid person1, Guid person2)
+        public async Task AcceptRelation(string person1, string person2)
         {
-            var requester = person1.ToString();
-            var requestee = person2.ToString();
+            var requester = person1;
+            var requestee = person2;
 
             var statementText = new StringBuilder();
             statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Send]->(m:Person {Id:$userId2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
@@ -240,17 +240,13 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var query = await _session.RunAsync(statementText.ToString(), statementParameters);
             }
         }
-        public async Task<string> GetAllUsers(string firstname)
+        public async Task<string> GetAllUsers()
         {
             var statementText = new StringBuilder();
-            statementText.Append("MATCH (n) WHERE n.Firstname = $firstname Return n");
-            var statementParameters = new Dictionary<string, object>
-            {
-                { "firstname", firstname }
-            };
+            statementText.Append("MATCH (n) Return n");
             using (replicaSession)
             {
-                var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                var query = await replicaSession.RunAsync(statementText.ToString());
                 var result = await query.ToListAsync();
                 var serializedResult = JsonSerializer.Serialize(result);
                 return serializedResult;

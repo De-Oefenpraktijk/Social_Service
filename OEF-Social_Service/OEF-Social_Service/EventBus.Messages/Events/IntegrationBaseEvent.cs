@@ -8,7 +8,7 @@
             EventCreationDate = DateTime.UtcNow;
         }
 
-        public IntegrationBaseEvent(Guid id, DateTime createDate)
+        public IntegrationBaseEvent(string id, DateTime createDate)
         {
             EventId = id;
             EventCreationDate = createDate;

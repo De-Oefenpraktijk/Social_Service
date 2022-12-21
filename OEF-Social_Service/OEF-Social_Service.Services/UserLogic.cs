@@ -34,7 +34,7 @@ namespace OEF_Social_Service.Services
            _followService.UpdateUser(person);
         }
 
-        public void FollowPerson(Guid person1, Guid person2)
+        public void FollowPerson(string person1, string person2)
         {
             try
             {
@@ -48,21 +48,21 @@ namespace OEF_Social_Service.Services
             }
         }
 
-        public Task<string> GetRequests(Guid person)
+        public Task<string> GetRequests(string person)
         {
                 return _followService.GetRequests(person);
         }
 
-        public void DeleteRelation(Guid person1, Guid person2)
+        public void DeleteRelation(string person1, string person2)
         {
             _followService.DeleteRelation(person1, person2);
         }
-        public void AcceptRelation(Guid person1, Guid person2)
+        public void AcceptRelation(string person1, string person2)
         {
             _followService.AcceptRelation(person1, person2);
         }
 
-        public Task<string> GetRecommendations(Guid person)
+        public Task<string> GetRecommendations(string person)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace OEF_Social_Service.Services
             }
         }
 
-        public Task<string> GetFollowingUsers(Guid person)
+        public Task<string> GetFollowingUsers(string person)
         {
             try
             {
@@ -89,11 +89,11 @@ namespace OEF_Social_Service.Services
                 throw e;
             }
         }
-        public Task<string> GetAllUsers(string firstname)
+        public Task<string> GetAllUsers()
         {
             try
             {
-                var allUsers = _followService.GetAllUsers(firstname);
+                var allUsers = _followService.GetAllUsers();
                 return (allUsers);
             }
             catch (Exception e)

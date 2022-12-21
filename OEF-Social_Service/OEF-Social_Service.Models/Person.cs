@@ -10,7 +10,7 @@ namespace OEF_Social_Service.Models
     public class Person
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = string.Empty;
         [Required]
         public string FirstName { get; set; } = String.Empty;
         [Required]

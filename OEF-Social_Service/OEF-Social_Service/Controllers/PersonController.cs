@@ -43,7 +43,7 @@ namespace OEF_Social_Service.Controllers
         }
 
         [HttpPost("followUser")]
-        public IActionResult followUser(Guid person1, Guid person2)
+        public IActionResult followUser(string person1, string person2)
         {
             try
             {
@@ -60,20 +60,20 @@ namespace OEF_Social_Service.Controllers
             return Ok();
         }
         [HttpGet("getRequest")]
-        public IActionResult getRequest(Guid person)
+        public IActionResult getRequest(string person)
         {
                 var i = _userLogic.GetRequests(person);
                 return Ok(i.Result);
         }
         [HttpGet("getRecommendation")]
-        public IActionResult GetRecommendation(Guid person)
+        public IActionResult GetRecommendation(string person)
         {
             var message = _userLogic.GetRecommendations(person);
             return Ok(message.Result);
         }
 
         [HttpDelete("DeleteRelation")]
-        public IActionResult DeleteRelation(Guid person1, Guid person2)
+        public IActionResult DeleteRelation(string person1, string person2)
         {
             if (person1 == person2)
             {
@@ -83,7 +83,7 @@ namespace OEF_Social_Service.Controllers
             return Ok();
         }
         [HttpPost("AcceptRelation")]
-        public IActionResult AcceptRelation(Guid person1, Guid person2)
+        public IActionResult AcceptRelation(string person1, string person2)
         {
             if (person1 == person2)
             {
@@ -94,16 +94,16 @@ namespace OEF_Social_Service.Controllers
         }
 
         [HttpGet("getFollowingUsers")]
-        public IActionResult GetFollowingUsers(Guid person)
+        public IActionResult GetFollowingUsers(string person)
         {
             var message = _userLogic.GetFollowingUsers(person);
             return Ok(message.Result);
         }
 
         [HttpGet("getAllUsers")]
-        public IActionResult getAllUsers(string firstname)
+        public IActionResult getAllUsers()
         {
-            var i = _userLogic.GetAllUsers(firstname);
+            var i = _userLogic.GetAllUsers();
             return Ok(i.Result);
         }
 

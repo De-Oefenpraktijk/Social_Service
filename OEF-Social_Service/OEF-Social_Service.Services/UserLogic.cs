@@ -89,5 +89,18 @@ namespace OEF_Social_Service.Services
                 throw e;
             }
         }
+        public Task<string> GetAllUsers(string firstname)
+        {
+            try
+            {
+                var allUsers = _followService.GetAllUsers(firstname);
+                return (allUsers);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

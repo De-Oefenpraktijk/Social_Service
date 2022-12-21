@@ -20,5 +20,6 @@ namespace OEF_Social_Service.Services.Interfaces
         void DeleteRelation(Guid person1, Guid person2);
         void AcceptRelation(Guid person1, Guid person2);
         Task<string> GetFollowingUsers(Guid person);
+        Task<string> GetAllUsers(string firstname);
     }
 }

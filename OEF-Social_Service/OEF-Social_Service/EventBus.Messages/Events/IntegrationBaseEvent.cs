@@ -4,7 +4,7 @@
     {
         public IntegrationBaseEvent()
         {
-            EventId = Guid.NewGuid();
+            EventId = string.Empty;
             EventCreationDate = DateTime.UtcNow;
         }
 
@@ -14,7 +14,7 @@
             EventCreationDate = createDate;
         }
 
-        public Guid EventId { get; private set; }
+        public string EventId { get; private set; }
         public DateTime EventCreationDate { get; private set; }
     }
 }

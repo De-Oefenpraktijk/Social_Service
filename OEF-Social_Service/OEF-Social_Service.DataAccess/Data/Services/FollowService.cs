@@ -102,7 +102,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 if (relationExist == false)
                 {
                     var statementText = new StringBuilder();
-                    statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Id = $userId AND p2.Id = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
+                    statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Username = $userId AND p2.Username = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
                     var statementParameters = new Dictionary<string, object>
                         {
                         {"userId", requester},
@@ -125,7 +125,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             var personString = person;
             var data = new List<Person>();
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person)-[r:Request_Send]->({Id: $firstname}) Return user");
+            statementText.Append("Match (user:Person)-[r:Request_Send]->({Username: $firstname}) Return user");
             var statementParameters = new Dictionary<string, object>
             {
                 {"firstname", personString},
@@ -144,7 +144,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             var requestee = person;
             var data = new List<Person>();
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Accepted*1..3]-(b) Return b");
+            statementText.Append("Match (user:Person {Username: $userId})-[r:Request_Accepted*1..3]-(b) Return b");
             //statementText.Append("Match (user:Person)-[r:Request_Send]->({Id: $firstname}) Return user");
             var statementParameters = new Dictionary<string, object>
             {
@@ -165,7 +165,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             var requestee = person;
             var data = new List<Person>();
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Accepted]-(b) Return b");
+            statementText.Append("Match (user:Person {Username: $userId})-[r:Request_Accepted]-(b) Return b");
             //statementText.Append("Match (user:Person)-[r:Request_Send]->({Id: $firstname}) Return user");
             var statementParameters = new Dictionary<string, object>
             {
@@ -184,7 +184,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
         public async Task<bool> DoesRelationExist(string person1, string person2)
         {
             var statementText = new StringBuilder();
-            statementText.Append("Match (p:Person {Id:$userId}), (b:Person {Id: $userId2}) RETURN EXISTS((p)-[]->(b))");
+            statementText.Append("Match (p:Person {Username:$userId}), (b:Person {Username: $userId2}) RETURN EXISTS((p)-[]->(b))");
             var statementParameters = new Dictionary<string, object>
             {
                 {"userId", person1},
@@ -212,7 +212,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             var requestee = person2;
 
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person)-[r]->({Id: $userId2}) Where ({Id: $userId})-[r]->() DELETE r");
+            statementText.Append("Match (user:Person)-[r]->({Username: $userId2}) Where ({Username: $userId})-[r]->() DELETE r");
             var statementParameters = new Dictionary<string, object>
             {
                 {"userId", requester},
@@ -229,7 +229,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             var requestee = person2;
 
             var statementText = new StringBuilder();
-            statementText.Append("Match (user:Person {Id: $userId})-[r:Request_Send]->(m:Person {Id:$userId2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
+            statementText.Append("Match (user:Person {Username: $userId})-[r:Request_Send]->(m:Person {Username:$userId2}) CREATE (user)-[r2:Request_Accepted]->(m) SET r2 = r WITH r DELETE r ");
             var statementParameters = new Dictionary<string, object>
             {
                 {"userId", requestee},

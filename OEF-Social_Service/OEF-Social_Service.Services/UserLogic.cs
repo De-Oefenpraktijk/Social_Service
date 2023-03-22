@@ -17,7 +17,7 @@ namespace OEF_Social_Service.Services
 
         public UserLogic(DataAccess.Data.Services.Interfaces.IFollowService followService)
         {
-            _followService = followService; 
+            _followService = followService;
         }
 
         public void CreatePerson(Person person)
@@ -31,7 +31,7 @@ namespace OEF_Social_Service.Services
 
         public void UpdatePerson(Person person)
         {
-           _followService.UpdateUser(person);
+            _followService.UpdateUser(person);
         }
 
         public void FollowPerson(string person1, string person2)
@@ -50,7 +50,7 @@ namespace OEF_Social_Service.Services
 
         public Task<string> GetRequests(string person)
         {
-                return _followService.GetRequests(person);
+            return _followService.GetRequests(person);
         }
 
         public void DeleteRelation(string person1, string person2)
@@ -94,6 +94,20 @@ namespace OEF_Social_Service.Services
             try
             {
                 var allUsers = _followService.GetAllUsers();
+                return (allUsers);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        public Task<string> GetAllUsersEmailAndIdStartsWith(string substring)
+        {
+            try
+            {
+                var allUsers = _followService.GetAllUsersEmailAndIdStartsWith(substring);
                 return (allUsers);
             }
             catch (Exception e)

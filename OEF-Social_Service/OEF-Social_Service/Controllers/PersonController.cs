@@ -62,8 +62,8 @@ namespace OEF_Social_Service.Controllers
         [HttpGet("getRequest")]
         public IActionResult getRequest(string person)
         {
-                var i = _userLogic.GetRequests(person);
-                return Ok(i.Result);
+            var i = _userLogic.GetRequests(person);
+            return Ok(i.Result);
         }
         [HttpGet("getRecommendation")]
         public IActionResult GetRecommendation(string person)
@@ -104,6 +104,13 @@ namespace OEF_Social_Service.Controllers
         public IActionResult getAllUsers()
         {
             var i = _userLogic.GetAllUsers();
+            return Ok(i.Result);
+        }
+
+        [HttpGet("dtos/emailandid/{substring}")]
+        public IActionResult getAllEmailAndIdStartsWith(string substring)
+        {
+            var i = _userLogic.GetAllUsersEmailAndIdStartsWith(substring);
             return Ok(i.Result);
         }
 

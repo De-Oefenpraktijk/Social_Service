@@ -94,30 +94,30 @@ namespace OEF_Social_Service.DataAccess.Data.Services
 
 
         public async Task SendRequest(string person1, string person2)
-           {
-                var requester = person1;
-                var requestee = person2;
+        {
+            var requester = person1;
+            var requestee = person2;
 
-                var relationExist = DoesRelationExist(requester, requestee).Result;
-                if (relationExist == false)
-                {
-                    var statementText = new StringBuilder();
-                    statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Username = $userId AND p2.Username = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
-                    var statementParameters = new Dictionary<string, object>
+            var relationExist = DoesRelationExist(requester, requestee).Result;
+            if (relationExist == false)
+            {
+                var statementText = new StringBuilder();
+                statementText.Append("MATCH (p1:Person), (p2:Person) WHERE p1.Username = $userId AND p2.Username = $userId2 CREATE (p1)-[p:Request_Send] ->(p2)");
+                var statementParameters = new Dictionary<string, object>
                         {
                         {"userId", requester},
                         {"userId2", requestee}
                         };
-                    using (_session)
-                    {
-                        //_session.LastBookmark.Values(null);
-                        var excecuteResult = await _session.RunAsync(statementText.ToString(), statementParameters);
-                    }
-                }
-                if (relationExist == true)
+                using (_session)
                 {
-                    return;
+                    //_session.LastBookmark.Values(null);
+                    var excecuteResult = await _session.RunAsync(statementText.ToString(), statementParameters);
                 }
+            }
+            if (relationExist == true)
+            {
+                return;
+            }
         }
 
         public async Task<string> GetRequests(string person)
@@ -250,6 +250,38 @@ namespace OEF_Social_Service.DataAccess.Data.Services
                 var result = await query.ToListAsync();
                 var serializedResult = JsonSerializer.Serialize(result);
                 return serializedResult;
+            }
+        }
+
+        public async Task<string> GetAllUsersEmailAndIdStartsWith(string substring)
+        {
+            var statementText = new StringBuilder();
+            if (substring == "*")
+            {
+                statementText.Append("MATCH (n:Person) Return n.Id, n.Email Limit 10");
+                using (replicaSession)
+                {
+                    var query = await replicaSession.RunAsync(statementText.ToString());
+                    var result = await query.ToListAsync();
+                    var serializedResult = JsonSerializer.Serialize(result);
+                    return serializedResult;
+                }
+            }
+            else
+            {
+                statementText.Append("MATCH (n:Person) WHERE n.Email STARTS WITH $substr RETURN n.Id, n.Email");
+                var statementParameters = new Dictionary<string, object>
+                {
+                    {"substr", substring}
+                };
+                Console.WriteLine(statementText.ToString());
+                using (replicaSession)
+                {
+                    var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                    var result = await query.ToListAsync();
+                    var serializedResult = JsonSerializer.Serialize(result);
+                    return serializedResult;
+                }
             }
         }
     }

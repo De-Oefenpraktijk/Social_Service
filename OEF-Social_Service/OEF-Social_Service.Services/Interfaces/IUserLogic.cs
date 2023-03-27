@@ -21,5 +21,6 @@ namespace OEF_Social_Service.Services.Interfaces
         void AcceptRelation(string person1, string person2);
         Task<string> GetFollowingUsers(string person);
         Task<string> GetAllUsers();
+        Task<string> GetAllUsersEmailAndIdStartsWith(string substring);
     }
 }

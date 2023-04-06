@@ -1,7 +1,6 @@
 ﻿using Neo4j.Driver;
 using OEF_Social_Service.DataAccess.Data.Services;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
-using OEF_Social_Service.DataAccess.Exceptions;
 using OEF_Social_Service.Models;
 using OEF_Social_Service.Services.Interfaces;
 using System;

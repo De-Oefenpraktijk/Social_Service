@@ -1,6 +1,7 @@
 ﻿using Neo4j.Driver;
 using OEF_Social_Service.DataAccess.Data.Services;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
+using OEF_Social_Service.DataAccess.Exceptions;
 using OEF_Social_Service.Models;
 using OEF_Social_Service.Services.Interfaces;
 using System;
@@ -27,6 +28,11 @@ namespace OEF_Social_Service.Services
         public Task<string> GetUser(string username)
         {
             return _followService.GetUser(username);
+        }
+        public Task<string?> GetUserById(string id)
+        {
+            Task<string?> user = _followService.GetUserById(id);
+            return user;
         }
 
         public void UpdatePerson(Person person)

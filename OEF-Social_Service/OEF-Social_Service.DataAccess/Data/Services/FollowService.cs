@@ -3,11 +3,13 @@ using Microsoft.Extensions.Options;
 using Neo4j.Driver;
 using OEF_Social_Service.Composition;
 using OEF_Social_Service.DataAccess.Data.Services.Interfaces;
+using OEF_Social_Service.DataAccess.Exceptions;
 using OEF_Social_Service.Models;
 using System;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+
 
 namespace OEF_Social_Service.DataAccess.Data.Services
 {
@@ -62,6 +64,27 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
                 var result = await query.ToListAsync();
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
+            }
+        }
+
+        public async Task<string?> GetUserById(string id)
+        {
+            StringBuilder statementText = new StringBuilder();
+            statementText.Append("MATCH (n) WHERE n.Id = $id Return n");
+            Dictionary<string, object> statementParameters = new Dictionary<string, object>
+            {
+                { "id", id }
+            };
+            using (replicaSession)
+            {
+                IResultCursor query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                List<IRecord> result = await query.ToListAsync();
+                if (result.Count == 0) // User not found
+                {
+                    return null;
+                }
                 var serializedResult = JsonSerializer.Serialize(result);
                 return serializedResult;
             }

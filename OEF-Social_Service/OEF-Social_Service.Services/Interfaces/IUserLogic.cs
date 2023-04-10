@@ -12,6 +12,7 @@ namespace OEF_Social_Service.Services.Interfaces
     {
         void CreatePerson(Person person);
         Task<string> GetUser(string username);
+        Task<string> GetUserById(string id);
         void UpdatePerson(Person person);
 
         void FollowPerson(string person1, string person2);

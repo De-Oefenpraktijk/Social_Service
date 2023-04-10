@@ -114,5 +114,11 @@ namespace OEF_Social_Service.Controllers
             return Ok(i.Result);
         }
 
+        [HttpGet("getUserById/{id}")]
+        public IActionResult getUserById(string id)
+        {
+            var i = _userLogic.GetUserById(id);
+            return Ok(i.Result);
+        }
     }
 }

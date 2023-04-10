@@ -67,6 +67,23 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             }
         }
 
+        public async Task<string> GetUserById(string id)
+        {
+            var statementText = new StringBuilder();
+            statementText.Append("MATCH (n) WHERE n.Id = $id Return n");
+            var statementParameters = new Dictionary<string, object>
+            {
+                { "id", id }
+            };
+            using (replicaSession)
+            {
+                var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                var result = await query.ToListAsync();
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
+            }
+        }
+
         public async Task UpdateUser(Person person)
         {
             var statementText = new StringBuilder();

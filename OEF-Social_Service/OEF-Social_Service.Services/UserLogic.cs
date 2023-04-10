@@ -29,6 +29,11 @@ namespace OEF_Social_Service.Services
             return _followService.GetUser(username);
         }
 
+        public Task<string> GetUserById(string id)
+        {
+            return _followService.GetUserById(id);
+        }
+
         public void UpdatePerson(Person person)
         {
             _followService.UpdateUser(person);

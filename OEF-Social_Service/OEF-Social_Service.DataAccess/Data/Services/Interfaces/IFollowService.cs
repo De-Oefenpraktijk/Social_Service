@@ -12,6 +12,7 @@ namespace OEF_Social_Service.DataAccess.Data.Services.Interfaces
     {
         Task CreateUser(Person person);
         Task<string> GetUser(string username);
+        Task<string?> GetUserById(string id);
         Task UpdateUser(Person person);
         Task SendRequest(string person1, string person2);
         Task<string> GetRequests(string person);

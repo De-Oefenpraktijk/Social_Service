@@ -42,6 +42,17 @@ namespace OEF_Social_Service.Controllers
             return Ok(i.Result);
         }
 
+        [HttpGet("getUserById")]
+        public IActionResult getUserById(string id)
+        {
+            Task<string?> user = _userLogic.GetUserById(id);
+            if (user.Result == null)
+            {
+                return NotFound();
+            }
+            return Ok(user.Result);
+        }
+
         [HttpPost("followUser")]
         public IActionResult followUser(string person1, string person2)
         {

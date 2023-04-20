@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 
+
 namespace OEF_Social_Service.DataAccess.Data.Services
 {
     public class FollowService : IFollowService
@@ -62,6 +63,27 @@ namespace OEF_Social_Service.DataAccess.Data.Services
             {
                 var query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
                 var result = await query.ToListAsync();
+                var serializedResult = JsonSerializer.Serialize(result);
+                return serializedResult;
+            }
+        }
+
+        public async Task<string?> GetUserById(string id)
+        {
+            StringBuilder statementText = new StringBuilder();
+            statementText.Append("MATCH (n) WHERE n.Id = $id Return n");
+            Dictionary<string, object> statementParameters = new Dictionary<string, object>
+            {
+                { "id", id }
+            };
+            using (replicaSession)
+            {
+                IResultCursor query = await replicaSession.RunAsync(statementText.ToString(), statementParameters);
+                List<IRecord> result = await query.ToListAsync();
+                if (result.Count == 0) // User not found
+                {
+                    return null;
+                }
                 var serializedResult = JsonSerializer.Serialize(result);
                 return serializedResult;
             }

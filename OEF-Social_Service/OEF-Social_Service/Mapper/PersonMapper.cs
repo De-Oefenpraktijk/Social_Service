@@ -4,9 +4,9 @@ using OEF_Social_Service.Models;
 
 namespace OEF_Social_Service.Mapper
 {
-    public class PersonMapper : Profile
+    public class NotFoundException : Profile
     {
-        public PersonMapper()
+        public NotFoundException()
         {
             CreateMap<Person, ProfileUpdatedEvent>().ReverseMap();
         }
